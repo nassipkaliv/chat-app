@@ -1,9 +1,6 @@
-import { View, Text } from 'react-native';
-import "./global.css";
-import HomeScreen from './src/screens/homeScreen';
+import './global.css'
+import AppNavigator from './src/navigation/AppNavigator'
 
 export default function App() {
-  return (
-    <HomeScreen />
-  );
+  return <AppNavigator />
 }
