@@ -1,7 +1,72 @@
 import React from 'react'
-import { View, Text, ScrollView, Button, TouchableOpacity, Image } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import { Ionicons, Feather } from '@expo/vector-icons'
 
+type ChatInfoProps = {
+  id: string
+  title: string
+  lastMessage: string
+  lastTime: string
+}
+
+const myChats: ChatInfoProps[] = [
+  {
+    id: '1',
+    title: 'Yernur Nassipkali',
+    lastMessage: 'React Native qiyn',
+    lastTime: '4:07PM',
+  },
+  {
+    id: '2',
+    title: 'Darkan',
+    lastMessage: 'Ya lox',
+    lastTime: '4:08PM',
+  },
+  {
+    id: '3',
+    title: 'Yerkin',
+    lastMessage: 'congr, your salary is 500K',
+    lastTime: '4:20AM',
+  },
+  {
+    id: '4',
+    title: 'Kendrik Lamar',
+    lastMessage: 'backdoor',
+    lastTime: '15:35PM',
+  },
+  {
+    id: '5',
+    title: 'Drake',
+    lastMessage: 'ovo',
+    lastTime: '6:66AM',
+  },
+]
+
+const ChatInfo = ({title, lastMessage, lastTime }: ChatInfoProps) => {
+  return (
+    <TouchableOpacity>
+      <View className="flex-row items-center px-4 py-3 border-b border-gray-900">
+      <View className="w-11 h-11 rounded-full bg-slate-700 items-center justify-center mr-3">
+       <Text className='text-white text-bold text-xl'>
+        {title[0]}
+       </Text>
+      </View>
+
+      <View className="flex-1">
+        <Text className="text-white font-semibold">
+          {title}
+        </Text>
+        <Text className="text-xs text-slate-300">
+          {lastMessage}
+        </Text>
+      </View>
+      <Text className="text-xs text-slate-400 ml-2">
+        {lastTime}
+      </Text>
+    </View>
+    </TouchableOpacity>
+  )
+}
 
 const HomeScreen = () => {
   return (
@@ -36,8 +101,18 @@ const HomeScreen = () => {
       </View>
 
       <View className="h-px bg-slate-800" />
-      </View>
 
+      <ScrollView className="flex-1">
+        {myChats.map(chat => (
+          <ChatInfo
+            key={chat.id}
+            title={chat.title}
+            lastMessage={chat.lastMessage}
+            lastTime={chat.lastTime} id={''}         
+             />
+        ))}
+      </ScrollView>
+    </View>
   )
 }
 
