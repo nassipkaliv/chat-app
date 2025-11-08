@@ -37,8 +37,8 @@ const ChatScreen = () => {
       </View>
       <View className="h-px bg-slate-800" />
 
-      <View className='mt-auto px-3 pb-4 pt-2 flex-row items-end gap-2'>
-        <TouchableOpacity className='w-9 h-9 rounded-full bg-slate-800 items-center justify-center'>
+      <View className="mt-auto px-3 pb-4 pt-2 flex-row items-end gap-2">
+        <TouchableOpacity className="w-9 h-9 rounded-full bg-slate-800 items-center justify-center">
           <Feather name='paperclip' size={18} color="#7f7f7f" />
         </TouchableOpacity>
 
