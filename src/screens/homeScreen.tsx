@@ -31,7 +31,7 @@ const myChats: Chat[] = [
   {
     id: '3',
     title: 'Yerkin',
-    lastMessage: 'congr, your salary is 500K',
+    lastMessage: 'congrutalions',
     lastTime: '4:20AM',
     unread: 2,
     ticked: false,
