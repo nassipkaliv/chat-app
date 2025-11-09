@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -7,10 +7,40 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native'
-import { Feather, FontAwesome } from '@expo/vector-icons'
+import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
+import { useChatStore } from '../store/chat'
 
-const ChatScreen = () => {
+type ChatScreenProps = {
+  onClose?: () => void
+}
+
+const ChatScreen = ({ onClose }: ChatScreenProps) => {
+  
+  const activeChatId = useChatStore(c => c.activeChatId)
+  const messages = useChatStore(c => c.messages)
+  const chats = useChatStore(c => c.chats)
+  const sendMessage = useChatStore(c => c.sendMessage)
+  const [text, setText] = useState('')
+
+  if(!activeChatId) {
+    return (
+      <Text className="text-white text-center">No chat</Text>
+    )
+  }
+  
+  const chat = chats.find(s=> s.id == activeChatId)
+  const chatMessages = messages.filter(m => m.chatId === activeChatId)
+
+  const handleSend = () => {
+    const trimmed = text.trim()
+    if(!trimmed) return
+
+    sendMessage(activeChatId, trimmed)
+    setText('')
+  }
+  
   return (
     <KeyboardAvoidingView
       className="flex-1 bg-tg-bg"
@@ -20,7 +50,7 @@ const ChatScreen = () => {
       <View className="flex-1 bg-tg-bg">
         <View className="px-4 pt-12 pb-2 flex-row items-center bg-tg-elevated">
           <View className="flex-1">
-            <TouchableOpacity className="w-9 h-9 rounded-full items-center justify-center">
+            <TouchableOpacity onPress={onClose} className="w-9 h-9 rounded-full items-center justify-center">
               <FontAwesome name="angle-left" size={24} color="#3b82f6" />
             </TouchableOpacity>
           </View>
@@ -28,7 +58,7 @@ const ChatScreen = () => {
           <TouchableOpacity className="flex-1 items-center">
             <View className="flex-row items-center gap-2">
               <Text className="text-white text-lg font-semibold">
-                username
+                {chat?.title ?? 'Chat'}
               </Text>
               <Image
                 source={require('../../assets/Telegram_Premium.png')}
@@ -43,11 +73,40 @@ const ChatScreen = () => {
           <View className="flex-1 flex-row justify-end gap-3">
             <TouchableOpacity className="w-10 h-10 rounded-full bg-slate-700 items-center justify-center">
               <Text className="text-white font-bold text-lg">
-                U
+                {chat?.title[0]}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
+
+        <ScrollView className="flex-1 px-3 py-2">
+          {chatMessages.map(msg => {
+            const isMe = msg.author === 'me'
+
+            return (
+              <View key={msg.id} className={`mb-1 flex-row ${isMe ? 'justify-end' : 'justify-start'}`}>
+                <View className={`max-w-[80%] px-3 py-2 rounded-2xl flex-row gap-4 ${
+                  isMe ? 'bg-blue-500 rounded-br-sm' : 'bg-tg-elevated rounded-bl-sm'
+                }`}>
+                  <Text className="text-white">{msg.text}</Text>
+                  <View className="flex-row justify-end mt-1">
+                    <Text className="text-[10px] text-slate-200">
+                      {msg.time}
+                    </Text>
+
+                    {isMe && (
+                      <Ionicons 
+                        name={msg.isRead ? 'checkmark-done' : 'checkmark'}
+                        size={12}
+                        color={msg.isRead ? '#fff' : '#fff'}
+                      />
+                    )}
+                  </View>
+                </View>
+              </View>
+            )
+          })}
+        </ScrollView>
 
         <View className="mt-auto px-3 pb-8 pt-2 flex-row items-end gap-2">
           <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center">
@@ -58,10 +117,13 @@ const ChatScreen = () => {
             className="flex-1 max-h-24 bg-tg-elevated text-white rounded-2xl px-3 py-2"
             placeholder="Something"
             placeholderTextColor="#6b7280"
+            value={text}
+            onChangeText={setText}
+            multiline
           />
 
-          <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center">
-            <Feather name="mic" size={18} color="#7f7f7f" />
+          <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center" onPress={handleSend}>
+            <Feather name="send" size={18} color="#7f7f7f" />
           </TouchableOpacity>
         </View>
       </View>

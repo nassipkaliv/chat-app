@@ -4,57 +4,53 @@ import HomeScreen from '../screens/homeScreen'
 import ChatScreen from '../screens/chatScreen'
 import ProfileScreen from '../screens/profileScreen'
 import ContactsScreen from '../screens/contactsScreen'
+import { useChatStore } from '../store/chat'
 
-type TabName = 'Contacts' | 'Home' | 'Profile'
+type TabName = 'Contacts' | 'Home' | 'Profile' | 'Chat'
 
-export default function AppNavigator() {
+const AppNavigator = () => {
   const [activeTab, setActiveTab] = useState<TabName>('Home')
+  const openChatInStore = useChatStore(c => c.openChat)
+
+  const handleOpenChat = (chatId : string) => {
+    openChatInStore(chatId)
+    setActiveTab('Chat')
+  }
+
+  const handleCloseChat = () => {
+    setActiveTab('Home')
+  }
 
   const renderScreen = () => {
-    switch (activeTab) {
+    switch(activeTab) {
       case 'Contacts':
-        return <ContactsScreen />
+        return ( <ContactsScreen  />)
+      case 'Chat':
+        return ( <ChatScreen onClose={handleCloseChat} />)
       case 'Home':
-        return <HomeScreen />
+        return ( <HomeScreen onOpenChat={handleOpenChat} />)
       case 'Profile':
-        return <ProfileScreen />
-      default:
-        return <HomeScreen />
+        return ( <ProfileScreen  />)
+      default: 
+        return ( <HomeScreen onOpenChat={handleOpenChat} />)
     }
   }
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-tg-bg">
       {renderScreen()}
 
-      <View className="flex-row bg-tg-elevated h-20  border-tg-border">
-        <TouchableOpacity
-          className="flex-1 items-center justify-center"
-          onPress={() => setActiveTab('Contacts')}
-        >
-          <Text className={activeTab === 'Contacts' ? 'text-blue-500 font-semibold' : 'text-gray-400'}>
-            Contacts
-          </Text>
-        </TouchableOpacity>
-
-                <TouchableOpacity
-          className="flex-1 items-center justify-center"
-          onPress={() => setActiveTab('Home')}
-        >
-          <Text className={activeTab === 'Home' ? 'text-blue-500 font-semibold' : 'text-gray-400'}>
-            Home
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="flex-1 items-center justify-center"
-          onPress={() => setActiveTab('Profile')}
-        >
-          <Text className={activeTab === 'Profile' ? 'text-blue-500 font-semibold' : 'text-gray-400'}>
-            Profile
-          </Text>
-        </TouchableOpacity>
+      <View className="flex-row bg-tg-elevated h-16 border-t border-tg-border">
+        {(['Contacts', 'Home', 'Profile'] as TabName[]).map(tab => (
+          <TouchableOpacity key={tab} className="flex-1 items-center justify-center" onPress={() => setActiveTab(tab)}>
+            <Text className={activeTab === tab ? 'text-blue-500 font-semibold' : 'text-slate-400'}>
+              {tab}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   )
 }
+
+export default AppNavigator

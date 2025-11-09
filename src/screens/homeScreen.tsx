@@ -1,71 +1,22 @@
 import React from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import { Ionicons, Feather } from '@expo/vector-icons'
+import { useChatStore } from '../store/chat'
 
 
-type ChatInfoProps = {
+type ChatRowProps = {
   id: string
   title: string
   lastMessage: string
   lastTime: string
   unread: number
   ticked: boolean
+  onPress: () => void
 }
 
-const myChats: ChatInfoProps[] = [
-  {
-    id: '1',
-    title: 'Yernur Nassipkali',
-    lastMessage: 'React Native',
-    lastTime: '4:07PM',
-    unread: 2,
-    ticked: false,
-  },
-  {
-    id: '2',
-    title: 'Darkan',
-    lastMessage: 'Ya lox',
-    lastTime: '4:08PM',
-    unread: 0,
-    ticked: true,
-  },
-  {
-    id: '3',
-    title: 'Yerkin',
-    lastMessage: 'congrutalions',
-    lastTime: '4:20AM',
-    unread: 2,
-    ticked: false,
-  },
-  {
-    id: '4',
-    title: 'Kendrik Lamar',
-    lastMessage: 'backdoor',
-    lastTime: '15:35PM',
-    unread: 1,
-    ticked: false,
-  },
-  {
-    id: '5',
-    title: 'Drake',
-    lastMessage: 'ovo',
-    lastTime: '6:66AM',
-    unread: 0,
-    ticked: true,
-  },
-  {
-    id: '6',
-    title: 'Oraz',
-    lastMessage: 'menin bittarym huynya',
-    lastTime: '16:33',
-    unread: 0,
-    ticked: true,
-  },
-]
-
-const ChatInfo = ({ title, lastMessage, lastTime, unread, ticked }: ChatInfoProps) => {
+const ChatInfo = ({ title, lastMessage, lastTime, unread, ticked, onPress }: ChatRowProps) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View className="flex-row items-center px-4 py-3 border-b border-gray-900">
         <View className="w-11 h-11 rounded-full bg-slate-700 items-center justify-center mr-3">
           <Text className="text-white font-bold text-lg">
@@ -108,7 +59,12 @@ const ChatInfo = ({ title, lastMessage, lastTime, unread, ticked }: ChatInfoProp
   )
 }
 
-const HomeScreen = () => {
+type HomeScreenProps = {
+  onOpenChat: (chatId: string) => void
+}
+
+const HomeScreen = ({onOpenChat}: HomeScreenProps) => {
+  const chats = useChatStore(state => state.chats)
   return (
     <View className="flex-1 bg-tg-bg">
       <View className="px-4 pt-12 mt-3 pb-3 flex-row items-center bg-tg-elevated">
@@ -143,14 +99,17 @@ const HomeScreen = () => {
       <View className="h-px " />
 
       <View className="flex-1">
-        {myChats.map(chat => (
+        {chats.map(chat => (
           <ChatInfo
             key={chat.id}
             title={chat.title}
             lastMessage={chat.lastMessage}
             lastTime={chat.lastTime}
             unread={chat.unread}
-            ticked={chat.ticked} id={''}          />
+            ticked={chat.ticked}
+            onPress={() => onOpenChat(chat.id)} 
+            id={''}          
+            />
         ))}
       </View>
     </View>
