@@ -72,8 +72,8 @@ const ContactRow = ({title, status}: ContactsProps) => {
 
 const ContactsScreen = () => {
   return (
-    <View className="flex-1 bg-slate-950">
-      <View className="px-4 pt-12 mt-3 pb-3 flex-row items-center">
+    <View className="flex-1 bg-tg-bg">
+      <View className="px-4 pt-12 mt-3 pb-3 flex-row items-center bg-tg-elevated">
         <View className="flex-1">
           <TouchableOpacity>
             <Text className="text-blue-600 text-xl">Sort</Text>
@@ -87,27 +87,26 @@ const ContactsScreen = () => {
         </View>
 
         <View className="flex-1 items-end">
-          <View className="flex-row gap-3">
+          <TouchableOpacity className="flex-row gap-3">
             <Ionicons name="add" size={24} color="#3b82f6" />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 
-      <View className="h-px bg-slate-800" />
 
       <ScrollView>
-        <View className="px-4 pt-3 pb-2">
-          <View className="flex-row items-center bg-slate-900 rounded-xl px-3 py-2">
-            <Ionicons name="search" size={18} color="#6b7280" />
+        <View className="px-4 pt-3 pb-2 bg-tg-elevated">
+          <View className="flex-row items-center justify-center bg-tg-bg rounded-xl px-3 py-2">
+            <Ionicons name="search" className='ml-1' size={18} color="#6b7280" />
             <TextInput
-              className="ml-2 flex-1 text-white"
+              className="ml-4 flex-1 text-white"
               placeholder="Search"
               placeholderTextColor="#6b7280"
             />
           </View>
         </View>
 
-        <View className="pt-3 px-6">
+        <View className="pt-3 px-6 border-b">
           <TouchableOpacity className="flex-row gap-4 items-center">
             <Ionicons name='location-sharp' size={24} color="#3b82f6" />
             <Text className='text-blue-500 font-semibold'>Add Nearby</Text>

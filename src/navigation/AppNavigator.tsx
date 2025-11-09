@@ -27,7 +27,7 @@ export default function AppNavigator() {
     <View className="flex-1">
       {renderScreen()}
 
-      <View className="flex-row bg-slate-950 h-20 border-t border-slate-800">
+      <View className="flex-row bg-tg-elevated h-20  border-tg-border">
         <TouchableOpacity
           className="flex-1 items-center justify-center"
           onPress={() => setActiveTab('Contacts')}

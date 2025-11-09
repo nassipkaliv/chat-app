@@ -7,7 +7,13 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'tg-bg': '#000',         
+        'tg-elevated': '#1c1c1d;',      
+        'tg-border': '#545458',     
+      },
+    },
   },
   plugins: [],
 }

@@ -4,16 +4,16 @@ import { FontAwesome, Feather, Ionicons } from '@expo/vector-icons'
 
 const ProfileScreen = () => {
   return (
-    <View className="flex-1 bg-slate-950">
+    <View className="flex-1 bg-tg-bg">
       <View className="px-4 pt-12 pb-3 flex-row items-center">
         <View className="flex-1">
-          <TouchableOpacity className="w-9 h-9 rounded-full bg-slate-800 items-center justify-center">
-            <Ionicons name="qr-code" size={20} color="#fff" />
+          <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center">
+            <Ionicons name="qr-code" size={18} color="#fff" />
           </TouchableOpacity>
         </View>
 
         <View className="flex-1 items-end">
-          <TouchableOpacity className="rounded-full bg-slate-800 items-center justify-center h-9 px-3">
+          <TouchableOpacity className="rounded-full bg-tg-elevated items-center justify-center h-9 px-3">
             <Text className="text-base text-white font-semibold">
               Edit
             </Text>
@@ -47,7 +47,7 @@ const ProfileScreen = () => {
         </View>
 
 
-        <View className="flex-1 px-4 py-3 mt-3 bg-slate-800 mx-4 rounded-2xl">
+        <View className="flex-1 px-4 py-3 mt-3 bg-tg-elevated mx-4 rounded-2xl">
           <TouchableOpacity className='py-2 px-2'>
             <View className='flex-row gap-3 items-center'>
               <Image source={require('../../assets/avatar.png')} className="w-8 h-8 rounded-full" />
@@ -60,7 +60,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-1 px-4 py-3 mt-4 bg-slate-800 mx-4 rounded-2xl">
+        <View className="flex-1 px-4 py-3 mt-4 bg-tg-elevated mx-4 rounded-2xl">
           <TouchableOpacity className='py-2 px-2 justify-between flex-row'>
             <View className="flex-row items-center gap-4">
               <FontAwesome name='user-circle-o' size={24} color="#fff" />
@@ -70,7 +70,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-1 px-4 py-3 mt-4 bg-slate-800 mx-4 rounded-2xl">
+        <View className="flex-1 px-4 py-3 mt-4 bg-tg-elevated mx-4 rounded-2xl">
           <TouchableOpacity className='py-2 px-2 justify-between flex-row'>
             <View className="flex-row items-center gap-4">
               <Ionicons name='wallet' size={24} color="#fff" />
@@ -80,7 +80,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-1 px-4 py-3 mt-4 bg-slate-800 mx-4 rounded-2xl">
+        <View className="flex-1 px-4 py-3 mt-4 bg-tg-elevated mx-4 rounded-2xl">
           <TouchableOpacity className='py-2 px-2 justify-between flex-row'>
             <View className="flex-row items-center gap-4">
               <Feather name='bookmark' size={24} color="#fff" />
@@ -111,7 +111,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-1 px-4 py-3 mt-4 bg-slate-800 mx-4 rounded-2xl">
+        <View className="flex-1 px-4 py-3 mt-4 bg-tg-elevated mx-4 rounded-2xl">
           <TouchableOpacity className='py-2 px-2 justify-between flex-row'>
             <View className="flex-row items-center gap-4">
               <Ionicons name='notifications' size={24} color="#fff" />
