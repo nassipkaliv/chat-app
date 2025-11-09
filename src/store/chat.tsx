@@ -132,7 +132,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
 sendMessage: (chatId, text) => {
   const now = new Date()
-  const time = now.toLocaleTimeString().slice(0, 4)
+  const time = now.toLocaleTimeString().slice(0, 5)
 
   const newMessage: MessageInfoProps = {
     id: now.getTime().toString(),

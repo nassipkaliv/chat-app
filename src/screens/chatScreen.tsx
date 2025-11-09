@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ImageBackground,
 } from 'react-native'
 import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useChatStore } from '../store/chat'
@@ -35,6 +36,7 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
 
   const handleSend = () => {
     const trimmed = text.trim()
+    if(!trimmed) return
     sendMessage(activeChatId, trimmed)
     setText('')
   }
@@ -52,6 +54,7 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
               <FontAwesome name="angle-left" size={24} color="#3b82f6" />
             </TouchableOpacity>
           </View>
+
 
           <TouchableOpacity className="flex-1 items-center">
             <View className="flex-row items-center gap-2">
@@ -77,33 +80,35 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
           </View>
         </View>
 
-        <ScrollView className="flex-1 px-3 py-2">
-          {chatMessages.map(msg => {
-            const isMe = msg.author === 'me'
+        <ImageBackground source={require("../../assets/chatbg.png")} className="flex-1" resizeMode='cover' imageStyle={{ opacity: 0.2 }}>
+          <ScrollView className="flex-1 px-3 py-2">
+            {chatMessages.map(msg => {
+              const isMe = msg.author === 'me'
 
-            return (
-              <View key={msg.id} className={`mb-1 flex-row ${isMe ? 'justify-end' : 'justify-start'}`}>
-                <View className={`max-w-[80%] px-3 py-2 rounded-2xl ${
-                  isMe ? 'bg-blue-500 rounded-br-sm' : 'bg-tg-elevated rounded-bl-sm'
-                }`}>
-                  <Text className="text-white">{msg.text}</Text>     
-                  <View className="flex-row items-center justify-end gap-1 mt-1">
-                    <Text className="text-[10px] text-slate-300">
-                      {msg.time}
-                    </Text>
-                    {isMe && (
-                      <Ionicons 
-                        name={msg.isRead ? 'checkmark-done' : 'checkmark'}
-                        size={12}
-                        color="#fff"
-                      />
-                    )}
+              return (
+                <View key={msg.id} className={`mb-1 flex-row ${isMe ? 'justify-end' : 'justify-start'}`}>
+                  <View className={`max-w-[80%] px-3 py-2 rounded-2xl ${
+                    isMe ? 'bg-blue-500 rounded-br-sm' : 'bg-tg-elevated rounded-bl-sm'
+                  }`}>
+                    <Text className="text-white">{msg.text}</Text>     
+                    <View className="flex-row items-center justify-end gap-1 mt-1">
+                      <Text className="text-[10px] text-slate-300">
+                        {msg.time}
+                      </Text>
+                      {isMe && (
+                        <Ionicons 
+                          name={msg.isRead ? 'checkmark-done' : 'checkmark'}
+                          size={12}
+                          color="#fff"
+                        />
+                      )}
+                    </View>
                   </View>
                 </View>
-              </View>
-            )
-          })}
-        </ScrollView>
+              )
+            })}
+          </ScrollView>
+        </ImageBackground>
 
         <View className="mt-auto px-3 pb-8 pt-2 flex-row items-end gap-2">
           <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center">
@@ -112,15 +117,21 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
 
           <TextInput
             className="flex-1 max-h-24 bg-tg-elevated text-white rounded-2xl px-3 py-2"
-            placeholder="Something"
-            placeholderTextColor="#6b7280"
+            placeholder="Message"
+            placeholderTextColor="#636366"
             value={text}
             onChangeText={setText}
             multiline
           />
 
-          <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center" onPress={handleSend}>
-            <Feather name="send" size={18} color="#7f7f7f" />
+          <TouchableOpacity className=
+          {`w-9 h-9 rounded-full bg-tg-elevated items-center justify-center ${
+            !text.trim() ? 'opacity-80' : ''
+          }`}
+          onPress={handleSend}
+          disabled={!text.trim()}
+          >
+            <Feather name={text.trim() ? 'send' : 'mic'} size={18} color="#7f7f7f" />
           </TouchableOpacity>
         </View>
       </View>
