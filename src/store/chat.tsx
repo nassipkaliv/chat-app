@@ -58,7 +58,7 @@ const myChats: ChatInfoProps[] = [
   {
     id: '4',
     title: 'Kanye West',
-    lastMessage: 'backdoor',
+    lastMessage: 'Hey it is Kanye west',
     lastTime: '15:35',
     unread: 1,
     ticked: false,
@@ -162,6 +162,9 @@ sendMessage: (chatId, text) => {
       messages: state.messages.map(msg =>
         msg.id === newMessage.id
         ? {...msg, isRead: true} : msg
+      ),
+      chats: state.chats.map(chat => 
+        chat.id === chatId ? {...chat, ticked: true} : chat
       )
     }))
   }, 2000)

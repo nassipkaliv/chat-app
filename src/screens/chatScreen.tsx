@@ -35,8 +35,6 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
 
   const handleSend = () => {
     const trimmed = text.trim()
-    if(!trimmed) return
-
     sendMessage(activeChatId, trimmed)
     setText('')
   }
@@ -85,20 +83,19 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
 
             return (
               <View key={msg.id} className={`mb-1 flex-row ${isMe ? 'justify-end' : 'justify-start'}`}>
-                <View className={`max-w-[80%] px-3 py-2 rounded-2xl flex-row gap-4 ${
+                <View className={`max-w-[80%] px-3 py-2 rounded-2xl ${
                   isMe ? 'bg-blue-500 rounded-br-sm' : 'bg-tg-elevated rounded-bl-sm'
                 }`}>
-                  <Text className="text-white">{msg.text}</Text>
-                  <View className="flex-row justify-end mt-1">
-                    <Text className="text-[10px] text-slate-200">
+                  <Text className="text-white">{msg.text}</Text>     
+                  <View className="flex-row items-center justify-end gap-1 mt-1">
+                    <Text className="text-[10px] text-slate-300">
                       {msg.time}
                     </Text>
-
                     {isMe && (
                       <Ionicons 
                         name={msg.isRead ? 'checkmark-done' : 'checkmark'}
                         size={12}
-                        color={msg.isRead ? '#fff' : '#fff'}
+                        color="#fff"
                       />
                     )}
                   </View>

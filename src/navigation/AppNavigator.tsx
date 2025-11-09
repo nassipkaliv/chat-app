@@ -40,7 +40,8 @@ const AppNavigator = () => {
     <View className="flex-1 bg-tg-bg">
       {renderScreen()}
 
-      <View className="flex-row bg-tg-elevated h-16 border-t border-tg-border">
+      {activeTab !== 'Chat' && (
+        <View className="flex-row bg-tg-elevated h-16 border-t border-tg-border">
         {(['Contacts', 'Home', 'Profile'] as TabName[]).map(tab => (
           <TouchableOpacity key={tab} className="flex-1 items-center justify-center" onPress={() => setActiveTab(tab)}>
             <Text className={activeTab === tab ? 'text-blue-500 font-semibold' : 'text-slate-400'}>
@@ -49,6 +50,7 @@ const AppNavigator = () => {
           </TouchableOpacity>
         ))}
       </View>
+      )}
     </View>
   )
 }
