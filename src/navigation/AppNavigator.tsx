@@ -3,18 +3,19 @@ import { View, TouchableOpacity, Text } from 'react-native'
 import HomeScreen from '../screens/homeScreen'
 import ChatScreen from '../screens/chatScreen'
 import ProfileScreen from '../screens/profileScreen'
+import ContactsScreen from '../screens/contactsScreen'
 
-type TabName = 'Home' | 'Chat' | 'Profile'
+type TabName = 'Contacts' | 'Home' | 'Profile'
 
 export default function AppNavigator() {
   const [activeTab, setActiveTab] = useState<TabName>('Home')
 
   const renderScreen = () => {
     switch (activeTab) {
+      case 'Contacts':
+        return <ContactsScreen />
       case 'Home':
         return <HomeScreen />
-      case 'Chat':
-        return <ChatScreen />
       case 'Profile':
         return <ProfileScreen />
       default:
@@ -29,19 +30,19 @@ export default function AppNavigator() {
       <View className="flex-row bg-slate-950 h-20 border-t border-slate-800">
         <TouchableOpacity
           className="flex-1 items-center justify-center"
+          onPress={() => setActiveTab('Contacts')}
+        >
+          <Text className={activeTab === 'Contacts' ? 'text-blue-500 font-semibold' : 'text-gray-400'}>
+            Contacts
+          </Text>
+        </TouchableOpacity>
+
+                <TouchableOpacity
+          className="flex-1 items-center justify-center"
           onPress={() => setActiveTab('Home')}
         >
           <Text className={activeTab === 'Home' ? 'text-blue-500 font-semibold' : 'text-gray-400'}>
             Home
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="flex-1 items-center justify-center"
-          onPress={() => setActiveTab('Chat')}
-        >
-          <Text className={activeTab === 'Chat' ? 'text-blue-500 font-semibold' : 'text-gray-400'}>
-            Chat
           </Text>
         </TouchableOpacity>
 

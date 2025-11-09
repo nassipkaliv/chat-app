@@ -2,7 +2,8 @@ import React from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import { Ionicons, Feather } from '@expo/vector-icons'
 
-type Chat = {
+
+type ChatInfoProps = {
   id: string
   title: string
   lastMessage: string
@@ -11,7 +12,7 @@ type Chat = {
   ticked: boolean
 }
 
-const myChats: Chat[] = [
+const myChats: ChatInfoProps[] = [
   {
     id: '1',
     title: 'Yernur Nassipkali',
@@ -61,14 +62,6 @@ const myChats: Chat[] = [
     ticked: true,
   },
 ]
-
-type ChatInfoProps = {
-  title: string
-  lastMessage: string
-  lastTime: string
-  unread: number
-  ticked: boolean
-}
 
 const ChatInfo = ({ title, lastMessage, lastTime, unread, ticked }: ChatInfoProps) => {
   return (
@@ -157,8 +150,7 @@ const HomeScreen = () => {
             lastMessage={chat.lastMessage}
             lastTime={chat.lastTime}
             unread={chat.unread}
-            ticked={chat.ticked}
-          />
+            ticked={chat.ticked} id={''}          />
         ))}
       </View>
     </View>
