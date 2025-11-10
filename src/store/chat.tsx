@@ -16,9 +16,10 @@ export type MessageInfoProps = {
   text: string
   time: string
   isRead: boolean
-  type?: 'text' | 'voice'
+  type?: 'text' | 'voice' | 'video'
   duration?: number
   audioUri?: string
+  videoUri?: string
 }
 
 type ChatStore = {
@@ -30,8 +31,8 @@ type ChatStore = {
   receiveMessage: (msg: MessageInfoProps) => void 
   isChatRead: (chatId: string) => void
   sendVoiceMessage: (chatId: string, audioUri: string, duration: number) => void
+  sendVideoMessage: (chatId: string, videoUri: string, duration: number) => void
 }
-
 
 const myChats: ChatInfoProps[] = [
   {
@@ -45,7 +46,7 @@ const myChats: ChatInfoProps[] = [
   {
     id: '2',
     title: 'Darkan',
-    lastMessage: 'Ya lox',
+    lastMessage: 'Hello',
     lastTime: '4:08',
     unread: 0,
     ticked: true,
@@ -53,7 +54,7 @@ const myChats: ChatInfoProps[] = [
   {
     id: '3',
     title: 'Yerkin',
-    lastMessage: 'congrutalions',
+    lastMessage: 'congr!',
     lastTime: '4:20',
     unread: 2,
     ticked: false,
@@ -77,7 +78,7 @@ const myChats: ChatInfoProps[] = [
   {
     id: '6',
     title: 'Oraz',
-    lastMessage: 'menin bittarym huynya',
+    lastMessage: 'oraz',
     lastTime: '16:33',
     unread: 0,
     ticked: true,
@@ -89,7 +90,7 @@ const myMessages: MessageInfoProps[] = [
     id: 'm1',
     chatId: '1',
     author: 'user',
-    text: 'Hey',
+    text: 'React Native',
     time: '4:20',
     isRead: true,
   },
@@ -97,15 +98,15 @@ const myMessages: MessageInfoProps[] = [
     id: 'm2',
     chatId: '2',
     author: 'me',
-    text: 'Hey it is me',
+    text: 'Hello',
     time: '4:21',
     isRead: true,
   },
   {
     id: 'm3',
     chatId: '3',
-    author: 'me',
-    text: 'Hey it is Yernur',
+    author: 'user',
+    text: 'congr!',
     time: '5:30',
     isRead: false,
   },
@@ -114,6 +115,22 @@ const myMessages: MessageInfoProps[] = [
     chatId: '4',
     author: 'user',
     text: 'Hey it is Kanyye west',
+    time: '6:16',
+    isRead: true,
+  },
+  {
+    id: 'm5',
+    chatId: '5',
+    author: 'me',
+    text: 'ovo',
+    time: '17:50',
+    isRead: true,
+  },
+  {
+    id: 'm6',
+    chatId: '6',
+    author: 'me',
+    text: 'oraz',
     time: '6:16',
     isRead: true,
   },
@@ -127,7 +144,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   openChat: (chatId) => {
     set({ activeChatId: chatId })
     get().isChatRead(chatId)
-
     set(state => ({
       chats: state.chats.map(chat => chat.id === chatId ? { ...chat, unread: 0} : chat),
     }))
@@ -249,5 +265,47 @@ sendVoiceMessage: (chatId, audioUri, duration) => {
       )
     }))
   }, 2000)
-}
+},
+
+sendVideoMessage: (chatId, videoUri, duration) => {
+  const now = new Date()
+  const time = now.toLocaleTimeString().slice(0, 5)
+  
+  const newMessage: MessageInfoProps = {
+    id: now.getTime().toString(),
+    chatId,
+    author: 'me',
+    text: '',
+    time,
+    isRead: false,
+    type: 'video',
+    duration,
+    videoUri
+  }
+  set(state => ({
+    messages: [...state.messages, newMessage],
+    chats: state.chats.map(chat =>
+      chat.id === chatId
+        ? {
+            ...chat,
+            lastMessage: 'Video message',
+            lastTime: time,
+            ticked: false,
+          }
+        : chat
+    ),
+  }))
+  setTimeout(() => {
+    set(state => ({
+      messages: state.messages.map(msg =>
+        msg.id === newMessage.id
+        ? {...msg, isRead: true} : msg
+      ),
+      chats: state.chats.map(chat => 
+        chat.id === chatId ? {...chat, ticked: true} : chat
+      )
+    }))
+  }, 2000)
+},
+
 }))

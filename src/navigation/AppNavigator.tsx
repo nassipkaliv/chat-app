@@ -10,7 +10,7 @@ type TabName = 'Contacts' | 'Home' | 'Profile' | 'Chat'
 
 const AppNavigator = () => {
   const [activeTab, setActiveTab] = useState<TabName>('Home')
-  const openChatInStore = useChatStore(c => c.openChat)
+  const openChatInStore = useChatStore(state => state.openChat)
 
   const handleOpenChat = (chatId : string) => {
     openChatInStore(chatId)

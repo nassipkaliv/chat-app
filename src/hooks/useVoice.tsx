@@ -33,7 +33,6 @@
         setRecordingDuration(prev => prev +1)
       }, 1000)
     } catch (err) {
-      console.error('Failed to start recording', err)
       Alert.alert('Error', 'Fail to start record')
     }
   }
@@ -55,7 +54,6 @@
         duration: recordingDuration
       }
     } catch (err) {
-      console.error('Failed to stop recording', err)
       return null
     }
   }
@@ -71,7 +69,7 @@
       setRecording(null)
       setRecordingDuration(0)
     } catch (err) {
-      console.error('Failed to cancel recording', err)
+      console.log(err)
     }
   }
 

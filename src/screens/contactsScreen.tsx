@@ -2,14 +2,12 @@ import React from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native'
 import { Ionicons, Feather } from '@expo/vector-icons'
 
-
 type ContactsProps = 
   {
     id: string
     title: string
     status: string
   }
-
 
 const myContacts: ContactsProps[] = [
 {
@@ -40,9 +38,7 @@ const myContacts: ContactsProps[] = [
 ]
 
 const ContactRow = ({title, status}: ContactsProps) => {
-
   const isStatus = status.toLocaleLowerCase().includes('online')
-
   return (
     <TouchableOpacity>
       <View className="flex-row items-center px-4 py-3 border-b border-gray-900">

@@ -10,7 +10,6 @@ type VoiceMessageProps = {
   isMe: boolean
 }
 
-
 export const VoiceMessage = ({ audioUri, duration, isMe }: VoiceMessageProps) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [sound, setSound] = useState<Audio.Sound | null>(null)
@@ -31,15 +30,12 @@ export const VoiceMessage = ({ audioUri, duration, isMe }: VoiceMessageProps) =>
       playThroughEarpieceAndroid: false,
     })
     if (isPlaying && sound) {
-      // Пауза
       await sound.pauseAsync()
       setIsPlaying(false)
     } else if (sound) {
-      // Продолжаем воспроизведение
       await sound.playAsync()
       setIsPlaying(true)
     } else {
-      // Создаем новый звук
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: audioUri },
         { shouldPlay: true }
@@ -61,7 +57,7 @@ export const VoiceMessage = ({ audioUri, duration, isMe }: VoiceMessageProps) =>
       })
     }
   } catch (error) {
-    console.error('Error playing sound:', error)
+    console.log('error',error)
   }
 }
 
