@@ -16,6 +16,9 @@ export type MessageInfoProps = {
   text: string
   time: string
   isRead: boolean
+  type?: 'text' | 'voice'
+  duration?: number
+  audioUri?: string
 }
 
 type ChatStore = {
@@ -26,7 +29,7 @@ type ChatStore = {
   sendMessage: (chatId: string, text: string) => void
   receiveMessage: (msg: MessageInfoProps) => void 
   isChatRead: (chatId: string) => void
-
+  sendVoiceMessage: (chatId: string, audioUri: string, duration: number) => void
 }
 
 
@@ -205,6 +208,46 @@ isChatRead: (chatId) => {
       chat.id === chatId ? {...chat, unread: 0} : chat
     )
   }))
-}
+},
 
+sendVoiceMessage: (chatId, audioUri, duration) => {
+  const now = new Date()
+  const time = now.toLocaleTimeString().slice(0, 5)
+  
+  const newMessage: MessageInfoProps = {
+    id: now.getTime().toString(),
+    chatId,
+    author: 'me',
+    text: '',
+    time,
+    isRead: false,
+    type: 'voice',
+    duration,
+    audioUri
+  }
+  set(state => ({
+    messages: [...state.messages, newMessage],
+    chats: state.chats.map(chat =>
+      chat.id === chatId
+        ? {
+            ...chat,
+            lastMessage: 'Voice message',
+            lastTime: time,
+            ticked: false,
+          }
+        : chat
+    ),
+  }))
+  setTimeout(() => {
+    set(state => ({
+      messages: state.messages.map(msg =>
+        msg.id === newMessage.id
+        ? {...msg, isRead: true} : msg
+      ),
+      chats: state.chats.map(chat => 
+        chat.id === chatId ? {...chat, ticked: true} : chat
+      )
+    }))
+  }, 2000)
+}
 }))

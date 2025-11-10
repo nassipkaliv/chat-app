@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   Text,
@@ -12,6 +12,8 @@ import {
 } from 'react-native'
 import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useChatStore } from '../store/chat'
+import { useVoice } from '../hooks/useVoice'
+import { VoiceMessage } from '../components/VoiceMessage'
 
 type ChatScreenProps = {
   onClose?: () => void
@@ -19,11 +21,13 @@ type ChatScreenProps = {
 
 const ChatScreen = ({ onClose }: ChatScreenProps) => {
   
-  const activeChatId = useChatStore(c => c.activeChatId)
-  const messages = useChatStore(c => c.messages)
-  const chats = useChatStore(c => c.chats)
-  const sendMessage = useChatStore(c => c.sendMessage)
+  const activeChatId = useChatStore(state => state.activeChatId)
+  const messages = useChatStore(state => state.messages)
+  const chats = useChatStore(state => state.chats)
+  const sendMessage = useChatStore(state => state.sendMessage)
+  const sendVoiceMessage = useChatStore(state => state.sendVoiceMessage)
   const [text, setText] = useState('')
+  const [recordMode, setRecordMode] = useState<'voice' | 'video'>('voice')
 
   if(!activeChatId) {
     return (
@@ -40,7 +44,33 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
     sendMessage(activeChatId, trimmed)
     setText('')
   }
-  
+
+  const {
+    isRecording,
+    recordingDuration,
+    startRecording,
+    stopRecording,
+    cancelRecording
+  } = useVoice()
+  const handleVoiceMessage = async () => {
+    if(!activeChatId) return
+    const result = await stopRecording()
+
+    if(result && result.uri) {
+      sendVoiceMessage(activeChatId, result.uri, result.duration)
+    }
+  }
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const toggleRecordMode = () => {
+    setRecordMode(prev => prev === 'voice' ? 'video' : 'voice')
+  }
+
   return (
     <KeyboardAvoidingView
       className="flex-1 bg-tg-bg"
@@ -86,11 +116,20 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
               const isMe = msg.author === 'me'
 
               return (
-                <View key={msg.id} className={`mb-1 flex-row ${isMe ? 'justify-end' : 'justify-start'}`}>
+                <View key={msg.id} className={`mb-1 flex-row ${isMe ? 'justify-end': 'justify-start'}`}>
                   <View className={`max-w-[80%] px-3 py-2 rounded-2xl ${
-                    isMe ? 'bg-blue-500 rounded-br-sm' : 'bg-tg-elevated rounded-bl-sm'
+                    isMe ? 'bg-blue-500 rounded-br-sm' : 'bg-tg-elevated rouned-bl-sm'
                   }`}>
-                    <Text className="text-white">{msg.text}</Text>     
+                    {msg.type === 'voice' && msg.audioUri ? (
+                      <VoiceMessage 
+                        audioUri={msg.audioUri}
+                        duration={msg.duration || 0}
+                        isMe={isMe}
+                      />
+                    ) : (
+                      <Text className="text-white">{msg.text}</Text>
+                    )}
+
                     <View className="flex-row items-center justify-end gap-1 mt-1">
                       <Text className="text-[10px] text-slate-300">
                         {msg.time}
@@ -110,8 +149,26 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
           </ScrollView>
         </ImageBackground>
 
-        <View className="mt-auto px-3 pb-8 pt-2 flex-row items-end gap-2">
-          <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center">
+        <View className="mt-auto px-3 pb-8 pt-2">
+          {isRecording ? (
+            <View className="flex-row items-center gap-2 bg-tg-elevated rounded-2xl px-4 py-3">
+              <TouchableOpacity onPress={cancelRecording}>
+                <Feather name="x" size={24} color="#ef4444" />
+              </TouchableOpacity>
+
+              <View className="flex-1 flex-row items-center gap-2">
+                <View className="w-3 h-3 rounded-full bg-red-500" />
+                <Text className="text-white text-lg">
+                  {formatDuration(recordingDuration)}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={handleVoiceMessage} className="w-10 h-10 rounded-full bg-blue-500 items-center justify-center">
+                <Feather name="send" size={20} color="#fff" />
+              </TouchableOpacity>
+            </View>
+          ): (
+            <View className="flex-row items-end gap-2">
+              <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center">
             <Feather name="paperclip" size={18} color="#7f7f7f" />
           </TouchableOpacity>
 
@@ -124,15 +181,16 @@ const ChatScreen = ({ onClose }: ChatScreenProps) => {
             multiline
           />
 
-          <TouchableOpacity className=
-          {`w-9 h-9 rounded-full bg-tg-elevated items-center justify-center ${
-            !text.trim() ? 'opacity-80' : ''
-          }`}
-          onPress={handleSend}
-          disabled={!text.trim()}
+          <TouchableOpacity className="w-9 h-9 rounded-full bg-tg-elevated items-center justify-center"
+          onPress={text.trim() ? handleSend : toggleRecordMode}
+          onLongPress={text.trim() ? undefined : startRecording}
+          disabled={isRecording}
           >
-            <Feather name={text.trim() ? 'send' : 'mic'} size={18} color="#7f7f7f" />
+            <Feather name={text.trim() ? 'send' : (recordMode === 'voice' ? 'mic' : 'video')} size={18} color="#7f7f7f" />
           </TouchableOpacity>
+            </View>
+          )}
+          
         </View>
       </View>
     </KeyboardAvoidingView>
